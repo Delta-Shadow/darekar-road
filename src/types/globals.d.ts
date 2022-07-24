@@ -2,6 +2,7 @@ import { DocumentReference, Timestamp } from 'firebase/firestore';
 
 declare global {
 	interface MemeData {
+		id: string;
 		creationTime: Timestamp;
 		isCustom: boolean;
 		customImg: string;

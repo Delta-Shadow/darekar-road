@@ -5,7 +5,7 @@ import { db } from '../lib/firebase';
 async function getAllMemes(): Promise<Array<MemeData> | null> {
 	try {
 		const { docs } = await getDocs(collection(db, 'memes'));
-		const memes = docs.map((doc) => doc.data() as MemeData);
+		const memes = docs.map(doc => ({ id: doc.id, ...doc.data() } as MemeData));
 		return memes;
 	} catch (err) {
 		if (err instanceof FirebaseError) {
