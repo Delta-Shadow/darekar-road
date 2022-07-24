@@ -16,6 +16,7 @@ declare global {
 	}
 
 	interface Template {
+		id: string;
 		name: string;
 		img: string;
 		textboxes: Array<Textbox>;

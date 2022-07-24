@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BeatLoader } from 'react-spinners';
 import { simpleFade } from '../lib/animationVariants';
@@ -39,15 +41,7 @@ const Post = () => {
 					{templates === null ? (
 						<motion.p variants={simpleFade}>Failed to load templates</motion.p>
 					) : (
-						<motion.div
-							variants={simpleFade}
-							className='grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-4 lg:gap-16'
-						>
-							<CustomThumbnail />
-							{templates.map((template) => (
-								<TemplateThumbnail {...template} />
-							))}
-						</motion.div>
+						<TemplatesGrid templates={templates} />
 					)}
 				</>
 			)}
@@ -55,11 +49,33 @@ const Post = () => {
 	);
 };
 
+const TemplatesGrid = ({ templates }: { templates: Array<Template> }) => {
+	const rowHeight = '30vh';
+	return (
+		<motion.div
+			variants={simpleFade}
+			className={`grid grid-cols-2 auto-rows-[minmax(0,${rowHeight})] lg:grid-cols-3 gap-4 lg:gap-16`}
+		>
+			<CustomThumbnail />
+			{templates.map(template => (
+				<TemplateThumbnail {...template} />
+			))}
+		</motion.div>
+	);
+};
+
 const CustomThumbnail = () => {
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		navigate('/editor');
+	};
+
 	return (
 		<motion.div
 			variants={simpleFade}
 			className='rounded-xl hover:shadow-xl shadow-2xl flex flex-col justify-center items-center gap-4 cursor-pointer'
+			onClick={handleClick}
 		>
 			<p className='text-zinc-400 text-5xl md:text-6xl text-center'>+</p>
 			<p className='text-zinc-500 text-sm md:text-lg text-center'>Post a custom meme</p>
@@ -68,10 +84,22 @@ const CustomThumbnail = () => {
 };
 
 const TemplateThumbnail = (props: Template) => {
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		navigate({
+			pathname: '/editor',
+			search: `${createSearchParams({
+				t: props.id
+			})}`
+		});
+	};
+
 	return (
 		<motion.div
 			variants={simpleFade}
 			className='rounded-xl shadow-2xl hover:shadow-xl cursor-pointer'
+			onClick={handleClick}
 		>
 			<img
 				src={props.img}

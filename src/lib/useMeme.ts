@@ -11,7 +11,6 @@ function useMeme(): useMemeReturnType {
 	const [meme, setMeme] = useState<Meme | null>(null);
 
 	const loadMemes = async () => {
-		setLoading(true);
 		const result = await getAllMemesData();
 		if (result !== null && result.length > 0) {
 			setMemesData(result);

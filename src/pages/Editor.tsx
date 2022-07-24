@@ -1,12 +1,17 @@
 import { BeatLoader as Loader } from 'react-spinners';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import useMeme from '../lib/useMeme';
 import Meme from '../components/Meme';
 import { simpleFade } from '../lib/animationVariants';
+import useTemplate from '../lib/useTemplate';
 
-const Home = () => {
-	const [meme, loading, nextMeme] = useMeme();
+const Editor = () => {
+	const [searchParams] = useSearchParams();
+	const templateID = searchParams.get('t');
+	const [template, loading] = useTemplate(templateID || ''); // Will fail internally if templateID is null
+
+	if (templateID === null) return <Navigate to='/' />;
 
 	return (
 		<motion.div
@@ -29,13 +34,13 @@ const Home = () => {
 					</motion.div>
 				) : (
 					<>
-						{meme === null ? (
+						{template === null ? (
 							<motion.div variants={simpleFade}>
-								<MemeError />
+								<TemplateError />
 							</motion.div>
 						) : (
 							<motion.div variants={simpleFade}>
-								<Meme meme={meme} />
+								<Meme template={template} />
 							</motion.div>
 						)}
 					</>
@@ -45,18 +50,18 @@ const Home = () => {
 	);
 };
 
-const MemeError = () => {
+const TemplateError = () => {
 	return (
 		<div className='flex flex-col gap-4 p-4'>
 			<p className='text-zinc-50 text-3xl text-center'>
-				Darekar ne meme pe road bana diya guys
+				Darekar ne template pe bhi road bana diya guys
 			</p>
 			<p className='text-zinc-700 text-lg text-center mt-8'>
-				Could not load the meme due to some error
+				Could not load the template due to some error
 			</p>
 			<p className='text-zinc-500 text-xl text-center'>Very sorry</p>
 		</div>
 	);
 };
 
-export default Home;
+export default Editor;

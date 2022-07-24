@@ -1,12 +1,15 @@
-import { motion } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import MemeText from './MemeText';
 
 interface MemeProps {
-	meme: Meme;
+	meme?: Meme;
+	template?: Template;
 }
 
 const Meme = (props: MemeProps) => {
+	if (props.meme === undefined && props.template === undefined)
+		throw new Error('You need to provide either a meme, or a template');
+
 	const rootRef = useRef<HTMLDivElement>(null);
 	const imgRef = useRef<HTMLImageElement>(null);
 
@@ -39,15 +42,14 @@ const Meme = (props: MemeProps) => {
 		>
 			<img
 				ref={imgRef}
-				src={props.meme.img}
-				alt='meme'
+				src={props.meme?.img || props.template?.img}
+				alt='Meme'
 				className={`${fillAxis !== null ? 'w-full h-full' : ''}`}
 			/>
-			{props.meme.textboxes?.map((textbox) => {
+			{props.meme?.textboxes?.map(textbox => {
 				const { x, y, w, h, content } = textbox;
-				// return <MemeText {...{ x, y, w, h }}>{content}</MemeText>;
-				return <MemeText {...{ x, y, w, h }} />;
-			})}
+				return <MemeText {...{ x, y, w, h }}>{content}</MemeText>;
+			}) || props.template?.textboxes?.map(textbox => <MemeText {...textbox} />)}
 		</div>
 	);
 };

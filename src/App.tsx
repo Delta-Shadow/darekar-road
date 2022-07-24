@@ -2,6 +2,7 @@ import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Post from './pages/Post';
+import Editor from './pages/Editor';
 
 const App = () => {
 	return (
@@ -19,6 +20,10 @@ const App = () => {
 					<Route
 						path='/post'
 						element={<Post />}
+					/>
+					<Route
+						path='/editor'
+						element={<Editor />}
 					/>
 				</Routes>
 			</div>

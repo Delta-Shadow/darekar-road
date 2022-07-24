@@ -5,7 +5,7 @@ import { FirebaseError } from 'firebase/app';
 async function getAllTemplates(): Promise<Array<Template> | null> {
 	try {
 		const { docs } = await getDocs(collection(db, 'templates'));
-		const templates = docs.map((doc) => doc.data() as Template);
+		const templates = docs.map(doc => ({ id: doc.id, ...doc.data() } as Template));
 		return templates;
 	} catch (err) {
 		if (err instanceof FirebaseError) {
