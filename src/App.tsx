@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import useMeme from './lib/useMeme';
 import Meme from './components/Meme';
+import MemeError from './components/MemeError';
 
 const anime = {
 	initial: { opacity: 0, scale: 0.8 },
@@ -25,9 +26,7 @@ const App = () => {
 									color='white'
 								/>
 							) : (
-								<p className='text-white text-lg'>
-									Darekar ne meme pe road bana diya guys sorry
-								</p>
+								<MemeError />
 							)}
 						</motion.div>
 					) : (
