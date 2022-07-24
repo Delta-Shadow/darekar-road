@@ -1,40 +1,22 @@
-import { BeatLoader as Loader } from 'react-spinners';
-import { AnimatePresence, motion } from 'framer-motion';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import useMeme from './lib/useMeme';
-import Meme from './components/Meme';
-import MemeError from './components/MemeError';
-
-const anime = {
-	initial: { opacity: 0, scale: 0.8 },
-	animate: { opacity: 1, scale: 1 },
-	exit: { opacity: 0, scale: 0.8 }
-};
+import Home from './pages/Home';
+import Post from './pages/Post';
 
 const App = () => {
-	const [meme, loading, nextMeme] = useMeme();
-
 	return (
-		<div className='w-screen h-screen flex justify-center items-center bg-zinc-900'>
-			<div className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'>
-				<AnimatePresence>
-					{meme === null ? (
-						<motion.div {...anime}>
-							{loading ? (
-								<Loader
-									size={15}
-									color='white'
-								/>
-							) : (
-								<MemeError />
-							)}
-						</motion.div>
-					) : (
-						<Meme meme={meme} />
-					)}
-				</AnimatePresence>
-			</div>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path='/'
+					element={<Home />}
+				/>
+				<Route
+					path='/post'
+					element={<Post />}
+				/>
+			</Routes>
+		</BrowserRouter>
 	);
 };
 
