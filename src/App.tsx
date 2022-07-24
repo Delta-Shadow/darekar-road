@@ -2,6 +2,7 @@ import { BeatLoader as Loader } from 'react-spinners';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import useMeme from './lib/useMeme';
+import Meme from './components/Meme';
 
 const anime = {
 	initial: { opacity: 0, scale: 0.8 },
@@ -14,7 +15,7 @@ const App = () => {
 
 	return (
 		<div className='w-screen h-screen flex justify-center items-center bg-zinc-900'>
-			<div className='w-full h-full md:w-2/3 md:h-2/3 rounded-xl shadow-lg flex justify-center items-center'>
+			<div className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'>
 				<AnimatePresence>
 					{meme === null ? (
 						<motion.div {...anime}>
@@ -30,12 +31,7 @@ const App = () => {
 							)}
 						</motion.div>
 					) : (
-						<motion.img
-							src={meme.img}
-							alt='meme'
-							className='w-full h-full object-contain relative'
-							{...anime}
-						/>
+						<Meme meme={meme} />
 					)}
 				</AnimatePresence>
 			</div>
