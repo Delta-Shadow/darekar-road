@@ -12,7 +12,7 @@ const Post = () => {
 			initial='hidden'
 			animate='visible'
 			exit='hidden'
-			className='min-h-screen bg-zinc-900 p-8 md:px-24 xl:px-48 xl:py-24 2xl:px-64 2xl:py-32'
+			className='bg-zinc-900 p-8 md:px-24 xl:px-48 xl:py-24 2xl:px-64 2xl:py-32'
 		>
 			<motion.p
 				variants={simpleFade}

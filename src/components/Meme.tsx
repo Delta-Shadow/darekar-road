@@ -37,13 +37,11 @@ const Meme = (props: MemeProps) => {
 				height: fillAxis === 'y' ? '100%' : 'auto'
 			}}
 		>
-			<motion.img
+			<img
 				ref={imgRef}
 				src={props.meme.img}
 				alt='meme'
 				className={`${fillAxis !== null ? 'w-full h-full' : ''}`}
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
 			/>
 			{props.meme.textboxes?.map((textbox) => {
 				const { x, y, w, h, content } = textbox;

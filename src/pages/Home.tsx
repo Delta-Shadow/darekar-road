@@ -4,22 +4,23 @@ import { AnimatePresence, motion } from 'framer-motion';
 import useMeme from '../lib/useMeme';
 import Meme from '../components/Meme';
 import MemeError from '../components/MemeError';
-
-const anime = {
-	initial: { opacity: 0, scale: 0.8 },
-	animate: { opacity: 1, scale: 1 },
-	exit: { opacity: 0, scale: 0.8 }
-};
+import { simpleFade } from '../lib/animationVariants';
 
 const Home = () => {
 	const [meme, loading, nextMeme] = useMeme();
 
 	return (
-		<div className='w-screen h-screen flex justify-center items-center bg-zinc-900'>
+		<motion.div
+			variants={simpleFade}
+			initial='hidden'
+			animate='visible'
+			exit='hidden'
+			className='pt-20 flex justify-center items-center bg-zinc-900'
+		>
 			<div className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'>
 				<AnimatePresence>
 					{meme === null ? (
-						<motion.div {...anime}>
+						<motion.div variants={simpleFade}>
 							{loading ? (
 								<Loader
 									size={15}
@@ -30,11 +31,13 @@ const Home = () => {
 							)}
 						</motion.div>
 					) : (
-						<Meme meme={meme} />
+						<motion.div variants={simpleFade}>
+							<Meme meme={meme} />
+						</motion.div>
 					)}
 				</AnimatePresence>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

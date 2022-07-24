@@ -39,7 +39,7 @@ const MemeText = (props: MemeTextProps) => {
 	window.addEventListener('resize', adjustFontSize);
 
 	return (
-		<motion.div
+		<div
 			ref={containerRef}
 			style={{
 				position: 'absolute',
@@ -51,8 +51,6 @@ const MemeText = (props: MemeTextProps) => {
 				fontFamily: 'Impact',
 				padding: `${textPadding}px`
 			}}
-			initial={{ scale: 0.8 }}
-			animate={{ scale: 1 }}
 		>
 			<div
 				ref={textRef}
@@ -63,7 +61,7 @@ const MemeText = (props: MemeTextProps) => {
 			>
 				{props.children || 'Enter text here'}
 			</div>
-		</motion.div>
+		</div>
 	);
 };
 

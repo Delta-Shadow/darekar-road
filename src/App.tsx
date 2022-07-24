@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from './pages/Home';
 import Post from './pages/Post';
@@ -6,16 +6,22 @@ import Post from './pages/Post';
 const App = () => {
 	return (
 		<BrowserRouter>
-			<Routes>
-				<Route
-					path='/'
-					element={<Home />}
-				/>
-				<Route
-					path='/post'
-					element={<Post />}
-				/>
-			</Routes>
+			<div className='flex flex-col bg-zinc-900 w-screen min-h-screen'>
+				<div className='p-4 flex flex-row gap-4 justify-evenly text-zinc-700 text-md md:justify-end'>
+					<Link to='/'>Memes</Link>
+					<Link to='/post'>Post</Link>
+				</div>
+				<Routes>
+					<Route
+						path='/'
+						element={<Home />}
+					/>
+					<Route
+						path='/post'
+						element={<Post />}
+					/>
+				</Routes>
+			</div>
 		</BrowserRouter>
 	);
 };
