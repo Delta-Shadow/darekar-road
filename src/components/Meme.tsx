@@ -47,7 +47,8 @@ const Meme = (props: MemeProps) => {
 			/>
 			{props.meme.textboxes?.map((textbox) => {
 				const { x, y, w, h, content } = textbox;
-				return <MemeText {...{ x, y, w, h }}>{content}</MemeText>;
+				// return <MemeText {...{ x, y, w, h }}>{content}</MemeText>;
+				return <MemeText {...{ x, y, w, h }} />;
 			})}
 		</div>
 	);

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 const textPadding = 16;
 
 interface MemeTextProps extends Textbox {
-	children: string;
+	children?: string; // If no child, then consider this to be editable
 }
 
 const MemeText = (props: MemeTextProps) => {
@@ -15,29 +15,23 @@ const MemeText = (props: MemeTextProps) => {
 		if (containerRef.current === null || textRef.current === null) return;
 		const container = containerRef.current;
 		const text = textRef.current;
-		if (
-			text.getBoundingClientRect().height <
-			container.getBoundingClientRect().height - 2 * textPadding
-		) {
+
+		const isTextBiggerThanContainer = () =>
+			text.getBoundingClientRect().height >
+			container.getBoundingClientRect().height - 2 * textPadding;
+
+		const increaseFontSize = () =>
+			(text.style.fontSize = `${parseFloat(text.style.fontSize) + 1}px`);
+
+		const decreaseFontSize = () =>
+			(text.style.fontSize = `${parseFloat(text.style.fontSize) - 1}px`);
+
+		if (!isTextBiggerThanContainer()) {
 			// Grow this text
-			while (
-				text.getBoundingClientRect().height <
-				container.getBoundingClientRect().height - 2 * textPadding
-			) {
-				textRef.current.style.fontSize = `${
-					parseFloat(textRef.current.style.fontSize) + 1
-				}px`;
-			}
+			while (!isTextBiggerThanContainer()) increaseFontSize();
 		} else {
 			// Shrink this text
-			while (
-				text.getBoundingClientRect().height >
-				container.getBoundingClientRect().height - 2 * textPadding
-			) {
-				textRef.current.style.fontSize = `${
-					parseFloat(textRef.current.style.fontSize) - 1
-				}px`;
-			}
+			while (isTextBiggerThanContainer()) decreaseFontSize();
 		}
 	};
 
@@ -62,9 +56,12 @@ const MemeText = (props: MemeTextProps) => {
 		>
 			<div
 				ref={textRef}
-				style={{ fontSize: '16px' }}
+				style={{ fontSize: '16px', outline: 'none' }}
+				contentEditable={props.children === undefined}
+				spellCheck={false}
+				onInput={adjustFontSize}
 			>
-				{props.children}
+				{props.children || 'Enter text here'}
 			</div>
 		</motion.div>
 	);
