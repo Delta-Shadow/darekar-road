@@ -7,7 +7,7 @@ const App = () => {
 	return (
 		<BrowserRouter>
 			<div className='flex flex-col bg-zinc-900 w-screen min-h-screen'>
-				<div className='p-4 flex flex-row gap-4 justify-evenly text-zinc-700 text-md md:justify-end'>
+				<div className='pt-4 px-4 flex flex-row gap-4 justify-evenly text-zinc-600 text-md md:justify-end'>
 					<Link to='/'>Memes</Link>
 					<Link to='/post'>Post</Link>
 				</div>

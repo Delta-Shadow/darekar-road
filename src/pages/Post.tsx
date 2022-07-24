@@ -16,13 +16,13 @@ const Post = () => {
 		>
 			<motion.p
 				variants={simpleFade}
-				className='mb-4 text-3xl text-zinc-400 text-center'
+				className='mb-4 text-xl md:text-3xl text-zinc-400 text-center'
 			>
 				Darekar aapke contribution ka swagat karte hai
 			</motion.p>
 			<motion.p
 				variants={simpleFade}
-				className='mb-16 text-xl text-zinc-600 text-center'
+				className='mb-16 text-sm md:text-xl text-zinc-600 text-center'
 			>
 				Koi bhi template uthao aur road ko aage badhao
 			</motion.p>
@@ -41,7 +41,7 @@ const Post = () => {
 					) : (
 						<motion.div
 							variants={simpleFade}
-							className='grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-16'
+							className='grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-4 lg:gap-16'
 						>
 							<CustomThumbnail />
 							{templates.map((template) => (
@@ -61,8 +61,8 @@ const CustomThumbnail = () => {
 			variants={simpleFade}
 			className='rounded-xl hover:shadow-xl shadow-2xl flex flex-col justify-center items-center gap-4 cursor-pointer'
 		>
-			<p className='text-zinc-200 text-6xl text-center'>+</p>
-			<p className='text-zinc-500 text-lg text-center'>Post a custom meme</p>
+			<p className='text-zinc-400 text-5xl md:text-6xl text-center'>+</p>
+			<p className='text-zinc-500 text-sm md:text-lg text-center'>Post a custom meme</p>
 		</motion.div>
 	);
 };
