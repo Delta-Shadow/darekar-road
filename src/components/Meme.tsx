@@ -2,14 +2,13 @@ import { useRef, useState, useEffect } from 'react';
 import MemeText from './MemeText';
 
 interface MemeProps {
-	meme?: Meme;
-	template?: Template;
+	img: string;
+	textboxes?: Array<Textbox>;
+	texts?: Array<string>;
+	editable: boolean;
 }
 
 const Meme = (props: MemeProps) => {
-	if (props.meme === undefined && props.template === undefined)
-		throw new Error('You need to provide either a meme, or a template');
-
 	const rootRef = useRef<HTMLDivElement>(null);
 	const imgRef = useRef<HTMLImageElement>(null);
 
@@ -42,14 +41,14 @@ const Meme = (props: MemeProps) => {
 		>
 			<img
 				ref={imgRef}
-				src={props.meme?.img || props.template?.img}
+				src={props.img}
 				alt='Meme'
 				className={`${fillAxis !== null ? 'w-full h-full' : ''}`}
 			/>
-			{props.meme?.textboxes?.map(textbox => {
-				const { x, y, w, h, content } = textbox;
-				return <MemeText {...{ x, y, w, h }}>{content}</MemeText>;
-			}) || props.template?.textboxes?.map(textbox => <MemeText {...textbox} />)}
+			{props.textboxes?.map((textbox, i) => {
+				if (props.editable) return <MemeText {...textbox} />;
+				else return <MemeText {...textbox}>{props.texts?.at(i)}</MemeText>;
+			})}
 		</div>
 	);
 };

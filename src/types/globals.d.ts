@@ -1,19 +1,13 @@
 import { DocumentReference, Timestamp } from 'firebase/firestore';
 
 declare global {
-	interface MemeData {
+	interface Meme {
 		id: string;
 		creationTime: Timestamp;
 		isCustom: boolean;
 		customImg: string;
-		template: DocumentReference;
+		templateID: string;
 		textboxes: Array<string>;
-	}
-
-	interface Meme {
-		creationTime: Timestamp;
-		img: string;
-		textboxes: Array<Textbox & { content: string }> | null;
 	}
 
 	interface Template {

@@ -2,10 +2,10 @@ import { FirebaseError } from 'firebase/app';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
-async function getAllMemes(): Promise<Array<MemeData> | null> {
+async function getAllMemes(): Promise<Array<Meme> | null> {
 	try {
 		const { docs } = await getDocs(collection(db, 'memes'));
-		const memes = docs.map(doc => ({ id: doc.id, ...doc.data() } as MemeData));
+		const memes = docs.map(doc => ({ id: doc.id, ...doc.data() } as Meme));
 		return memes;
 	} catch (err) {
 		if (err instanceof FirebaseError) {

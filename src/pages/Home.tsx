@@ -4,9 +4,37 @@ import { motion } from 'framer-motion';
 import useMeme from '../lib/useMeme';
 import Meme from '../components/Meme';
 import { simpleFade } from '../lib/animationVariants';
+import { useEffect, useState } from 'react';
 
 const Home = () => {
-	const [meme, loading, nextMeme] = useMeme();
+	const [meme, template, loading, nextMeme] = useMeme();
+
+	const [memeData, setMemeData] = useState<{
+		img: string;
+		textboxes: Array<Textbox>;
+		texts: Array<string>;
+		editable: boolean;
+	} | null>(null);
+
+	useEffect(() => {
+		if (loading || meme === null) return;
+		if (meme.isCustom) {
+			setMemeData({
+				img: meme.customImg,
+				textboxes: [],
+				texts: [],
+				editable: false
+			});
+		} else {
+			if (template === null) return;
+			setMemeData({
+				img: template.img,
+				textboxes: template.textboxes,
+				texts: meme.textboxes,
+				editable: false
+			});
+		}
+	}, [loading]);
 
 	return (
 		<motion.div
@@ -20,26 +48,20 @@ const Home = () => {
 				variants={simpleFade}
 				className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'
 			>
-				{loading ? (
+				{loading && (
 					<motion.div variants={simpleFade}>
 						<Loader
 							size={15}
 							color='white'
 						/>
 					</motion.div>
-				) : (
-					<>
-						{meme === null ? (
-							<motion.div variants={simpleFade}>
-								<MemeError />
-							</motion.div>
-						) : (
-							<motion.div variants={simpleFade}>
-								<Meme meme={meme} />
-							</motion.div>
-						)}
-					</>
 				)}
+				{!loading && memeData === null && (
+					<motion.div variants={simpleFade}>
+						<MemeError />
+					</motion.div>
+				)}
+				{!loading && memeData !== null && <Meme {...memeData} />}
 			</motion.div>
 		</motion.div>
 	);

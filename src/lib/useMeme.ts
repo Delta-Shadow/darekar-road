@@ -1,54 +1,61 @@
 import { useEffect, useState } from 'react';
-import downloadMeme from '../api/downloadMeme';
-import getAllMemesData from '../api/getAllMemesData';
+import downloadImg from '../api/downloadImg';
+import getAllMemes from '../api/getAllMemes';
+import getTemplate from '../api/fetchTemplate';
 
-type useMemeReturnType = [Meme | null, boolean, (() => void) | null];
+let memes: Array<Meme> | null = null;
+let currentMeme: number | null = null;
 
-function useMeme(): useMemeReturnType {
-	const [memesData, setMemesData] = useState<Array<MemeData>>([]);
-	const [currentMeme, setCurrentMeme] = useState<number | null>(null);
+type UseMemeReturnType = [Meme | null, Template | null, boolean, (() => void) | null];
+
+function useMeme(): UseMemeReturnType {
 	const [loading, setLoading] = useState(true);
 	const [meme, setMeme] = useState<Meme | null>(null);
-
-	const loadMemes = async () => {
-		const result = await getAllMemesData();
-		if (result !== null && result.length > 0) {
-			setMemesData(result);
-			setCurrentMeme(0);
-		} else {
-			setLoading(false);
-		}
-	};
-
-	const prepareMeme = async () => {
-		if (currentMeme === null) return;
-		setLoading(true);
-		const result = await downloadMeme(memesData[currentMeme]);
-		if (result !== null) {
-			setLoading(false);
-			setMeme(result);
-		}
-	};
-
-	const nextMeme = () => {
-		if (currentMeme === null) return;
-		setCurrentMeme(currentMeme + 1);
-	};
+	const [template, setTemplate] = useState<Template | null>(null);
 
 	useEffect(() => {
 		loadMemes();
 	}, []);
 
-	useEffect(() => {
-		prepareMeme();
-	}, [currentMeme]);
+	const loadMemes = async () => {
+		const result = await getAllMemes();
+		if (result !== null && result.length > 0) {
+			memes = result;
+			currentMeme = 0;
+			prepareCurrentMeme();
+		}
+	};
+
+	const prepareCurrentMeme = async () => {
+		if (memes === null || currentMeme === null) return;
+		if (memes[currentMeme].isCustom) {
+			const success = await downloadImg(memes[currentMeme].customImg);
+			if (success) setMeme(memes[currentMeme]);
+		} else {
+			const template = await getTemplate(memes[currentMeme].templateID);
+			if (template !== null) {
+				const success = await downloadImg(template.img);
+				if (success) {
+					setMeme(memes[currentMeme]);
+					setTemplate(template);
+				}
+			}
+		}
+		setLoading(false);
+	};
+
+	const nextMeme = () => {
+		if (memes === null || currentMeme === null) return;
+		setLoading(true);
+		currentMeme++;
+		prepareCurrentMeme();
+	};
 
 	return [
 		meme,
+		template,
 		loading,
-		currentMeme !== null && memesData !== null && currentMeme + 1 < memesData.length
-			? nextMeme
-			: null
+		currentMeme !== null && memes !== null && currentMeme + 1 < memes.length ? nextMeme : null
 	];
 }
 

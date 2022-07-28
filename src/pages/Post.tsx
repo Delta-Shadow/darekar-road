@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { BeatLoader } from 'react-spinners';
 import { simpleFade } from '../lib/animationVariants';
-import useTemplates from '../lib/useTemplates';
+import useLoader from '../lib/useLoader';
+import fetchAllTemplates from '../api/fetchAllTemplates';
 
 const Post = () => {
-	const [templates, loading] = useTemplates();
+	const [templates, templatesFetchStatus] = useLoader(fetchAllTemplates);
 
 	return (
 		<motion.div
@@ -28,7 +28,7 @@ const Post = () => {
 			>
 				Koi bhi template uthao aur road ko aage badhao
 			</motion.p>
-			{loading ? (
+			{templatesFetchStatus === 'waiting' && (
 				<motion.div variants={simpleFade}>
 					<BeatLoader
 						className='text-center'
@@ -36,14 +36,12 @@ const Post = () => {
 						color='white'
 					/>
 				</motion.div>
-			) : (
-				<>
-					{templates === null ? (
-						<motion.p variants={simpleFade}>Failed to load templates</motion.p>
-					) : (
-						<TemplatesGrid templates={templates} />
-					)}
-				</>
+			)}
+			{templatesFetchStatus === 'failed' && (
+				<motion.p variants={simpleFade}>Failed to load templates</motion.p>
+			)}
+			{templatesFetchStatus === 'finished' && templates !== null && (
+				<TemplatesGrid templates={templates} />
 			)}
 		</motion.div>
 	);

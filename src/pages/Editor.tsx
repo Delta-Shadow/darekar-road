@@ -4,14 +4,17 @@ import { motion } from 'framer-motion';
 
 import Meme from '../components/Meme';
 import { simpleFade } from '../lib/animationVariants';
-import useTemplate from '../lib/useTemplate';
+import useAPI from '../lib/useAPI';
+import fetchTemplate from '../api/fetchTemplate';
 
 const Editor = () => {
 	const [searchParams] = useSearchParams();
-	const templateID = searchParams.get('t');
-	const [template, loading] = useTemplate(templateID || ''); // Will fail internally if templateID is null
+	const [template, templateFetchStatus, getTemplate] = useAPI(fetchTemplate);
 
+	const templateID = searchParams.get('t');
 	if (templateID === null) return <Navigate to='/' />;
+
+	if (templateFetchStatus === 'not_started') getTemplate(templateID);
 
 	return (
 		<motion.div
@@ -25,25 +28,28 @@ const Editor = () => {
 				variants={simpleFade}
 				className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'
 			>
-				{loading ? (
+				{templateFetchStatus === 'waiting' ||
+					(templateFetchStatus === 'not_started' && (
+						<motion.div variants={simpleFade}>
+							<Loader
+								size={15}
+								color='white'
+							/>
+						</motion.div>
+					))}
+				{templateFetchStatus === 'failed' && (
 					<motion.div variants={simpleFade}>
-						<Loader
-							size={15}
-							color='white'
+						<TemplateError />
+					</motion.div>
+				)}
+				{templateFetchStatus === 'finished' && template !== null && (
+					<motion.div variants={simpleFade}>
+						<Meme
+							img={template.img}
+							textboxes={template.textboxes}
+							editable
 						/>
 					</motion.div>
-				) : (
-					<>
-						{template === null ? (
-							<motion.div variants={simpleFade}>
-								<TemplateError />
-							</motion.div>
-						) : (
-							<motion.div variants={simpleFade}>
-								<Meme template={template} />
-							</motion.div>
-						)}
-					</>
 				)}
 			</motion.div>
 		</motion.div>
