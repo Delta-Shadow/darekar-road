@@ -50,20 +50,28 @@ const Editor = () => {
 			>
 				{templateFetchStatus === 'waiting' ||
 					(templateFetchStatus === 'not_started' && (
-						<motion.div variants={simpleFade}>
-							<Loader
-								size={15}
-								color='white'
-							/>
-						</motion.div>
+						<Loader
+							size={15}
+							color='white'
+						/>
 					))}
 				{templateFetchStatus === 'failed' && (
-					<motion.div variants={simpleFade}>
+					<motion.div
+						variants={simpleFade}
+						initial='hidden'
+						animate='visible'
+						exit='hidden'
+					>
 						<TemplateError />
 					</motion.div>
 				)}
 				{templateFetchStatus === 'finished' && template !== null && (
-					<motion.div variants={simpleFade}>
+					<motion.div
+						variants={simpleFade}
+						initial='hidden'
+						animate='visible'
+						exit='hidden'
+					>
 						<EditableMeme
 							img={template.img}
 							textboxes={template.textboxes}
@@ -80,7 +88,7 @@ const Editor = () => {
 				{postMemeStatus === 'not_started' && 'Post karo'}
 				{postMemeStatus === 'waiting' && (
 					<>
-						'Waiting'
+						Waiting
 						<BarLoader width='100%' />
 					</>
 				)}

@@ -48,11 +48,10 @@ const Post = () => {
 };
 
 const TemplatesGrid = ({ templates }: { templates: Array<Template> }) => {
-	const rowHeight = '30vh';
 	return (
 		<motion.div
 			variants={simpleFade}
-			className={`grid grid-cols-2 auto-rows-[minmax(0,${rowHeight})] lg:grid-cols-3 gap-4 lg:gap-16`}
+			className={`grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-4 lg:gap-16`}
 		>
 			<CustomThumbnail />
 			{templates.map(template => (
