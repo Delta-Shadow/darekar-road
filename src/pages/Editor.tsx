@@ -1,20 +1,40 @@
-import { BeatLoader as Loader } from 'react-spinners';
+import { useRef } from 'react';
+import { BarLoader, BeatLoader as Loader, CircleLoader } from 'react-spinners';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-import Meme from '../components/Meme';
+import EditableMeme from '../components/EditableMeme';
 import { simpleFade } from '../lib/animationVariants';
 import useAPI from '../lib/useAPI';
 import fetchTemplate from '../api/fetchTemplate';
+import postMeme from '../api/postMeme';
+// import postMeme from '../api/postMeme';
 
 const Editor = () => {
 	const [searchParams] = useSearchParams();
 	const [template, templateFetchStatus, getTemplate] = useAPI(fetchTemplate);
+	const [postMemeResponse, postMemeStatus, postMemeTrigger] = useAPI(postMeme, {
+		resetOnFail: true,
+		delayedReset: true
+	});
+	const txts = useRef<Array<string> | null>(null);
 
 	const templateID = searchParams.get('t');
 	if (templateID === null) return <Navigate to='/' />;
 
 	if (templateFetchStatus === 'not_started') getTemplate(templateID);
+
+	const handleEdit = ((_txts: Array<string>) => {
+		txts.current = _txts;
+	}).bind(this);
+
+	const handlePost = () => {
+		if (template === null || txts.current === null) return;
+		postMemeTrigger({
+			templateID: template.id,
+			texts: txts.current
+		});
+	};
 
 	return (
 		<motion.div
@@ -22,7 +42,7 @@ const Editor = () => {
 			initial='hidden'
 			animate='visible'
 			exit='hidden'
-			className='flex-1 flex justify-center items-center bg-zinc-900'
+			className='flex-1 flex flex-col gap-8 justify-center items-center bg-zinc-900'
 		>
 			<motion.div
 				variants={simpleFade}
@@ -44,14 +64,29 @@ const Editor = () => {
 				)}
 				{templateFetchStatus === 'finished' && template !== null && (
 					<motion.div variants={simpleFade}>
-						<Meme
+						<EditableMeme
 							img={template.img}
 							textboxes={template.textboxes}
-							editable
+							onEdit={handleEdit}
 						/>
 					</motion.div>
 				)}
 			</motion.div>
+			<motion.button
+				variants={simpleFade}
+				className='p-2 bg-zinc-400 rounded-xl  w-1/6'
+				onClick={postMemeStatus === 'not_started' ? handlePost : undefined}
+			>
+				{postMemeStatus === 'not_started' && 'Post karo'}
+				{postMemeStatus === 'waiting' && (
+					<>
+						'Waiting'
+						<BarLoader width='100%' />
+					</>
+				)}
+				{postMemeStatus === 'finished' && 'Posted Meme!'}
+				{postMemeStatus === 'failed' && 'Could not post'}
+			</motion.button>
 		</motion.div>
 	);
 };

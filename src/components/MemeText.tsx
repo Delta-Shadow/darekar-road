@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const textPadding = 16;
 
 interface MemeTextProps extends Textbox {
+	onEdit?: (txt: string) => void;
 	children?: string; // If no child, then consider this to be editable
 }
 
@@ -38,6 +38,11 @@ const MemeText = (props: MemeTextProps) => {
 	useEffect(adjustFontSize, []);
 	window.addEventListener('resize', adjustFontSize);
 
+	const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+		adjustFontSize();
+		if (props.onEdit) props.onEdit(e.currentTarget.textContent || '');
+	};
+
 	return (
 		<div
 			ref={containerRef}
@@ -57,7 +62,7 @@ const MemeText = (props: MemeTextProps) => {
 				style={{ fontSize: '16px', outline: 'none' }}
 				contentEditable={props.children === undefined}
 				spellCheck={false}
-				onInput={adjustFontSize}
+				onInput={e => handleInput(e)}
 			>
 				{props.children || 'Enter text here'}
 			</div>

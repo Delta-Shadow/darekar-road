@@ -9,6 +9,7 @@ type ReturnObject<T extends EndpointHandler> = [
 	(...args: Parameters<T>) => void
 ];
 type Options<T extends EndpointHandler> = {
+	resetOnFail?: boolean;
 	delayedReset?: boolean;
 	resetDelay?: number; // milliseconds
 	quickReset?: boolean;
@@ -31,8 +32,7 @@ function useAPI<T extends EndpointHandler>(
 		} catch (err) {
 			console.error(err);
 			setStatus('failed');
-			if (options?.fallbackValue !== undefined)
-				setValue(options.fallbackValue);
+			if (options?.fallbackValue !== undefined) setValue(options.fallbackValue);
 		}
 	};
 
@@ -45,16 +45,16 @@ function useAPI<T extends EndpointHandler>(
 	};
 
 	const reset = () => {
-		if (status === 'finished' || status === 'failed')
-			setStatus('not_started');
+		if (status === 'finished' || status === 'failed') setStatus('not_started');
 	};
 
 	useEffect(() => {
+		if (options?.resetOnFail && status === 'finished') return;
 		if (status === 'finished' || status === 'failed') {
 			if (options?.quickReset) {
 				reset();
 			} else if (options?.delayedReset) {
-				setTimeout(reset, options.resetDelay || 1000);
+				setTimeout(reset, options.resetDelay || 2000);
 			}
 		}
 	}, [status]);

@@ -42,7 +42,6 @@ const Home = () => {
 								img={template.img}
 								textboxes={template.textboxes}
 								texts={meme.textboxes}
-								editable={false}
 							/>
 						)}
 					</>
