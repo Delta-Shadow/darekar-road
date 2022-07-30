@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import downloadImg from '../api/downloadImg';
-import getAllMemes from '../api/getAllMemes';
-import getTemplate from '../api/fetchTemplate';
+import { readAllMemes } from '../api/meme';
+import { readTemplate } from '../api/template';
 
 let memes: Array<Meme> | null = null;
 let currentMeme: number | null = null;
@@ -18,28 +18,31 @@ function useMeme(): UseMemeReturnType {
 	}, []);
 
 	const loadMemes = async () => {
-		const result = await getAllMemes();
-		if (result !== null && result.length > 0) {
-			memes = result;
+		const result = await readAllMemes();
+		const values = Object.values(result);
+		if (values !== null && values.length > 0) {
+			memes = values;
 			currentMeme = 0;
 			prepareCurrentMeme();
+		} else {
+			setLoading(false);
 		}
 	};
 
 	const prepareCurrentMeme = async () => {
 		if (memes === null || currentMeme === null) return;
-		if (memes[currentMeme].isCustom) {
-			const success = await downloadImg(memes[currentMeme].customImg);
-			if (success) setMeme(memes[currentMeme]);
-		} else {
-			const template = await getTemplate(memes[currentMeme].templateID);
-			if (template !== null) {
+		try {
+			if (memes[currentMeme].isCustom) {
+				const success = await downloadImg(memes[currentMeme].customImg);
+				setMeme(memes[currentMeme]);
+			} else {
+				const template = await readTemplate(memes[currentMeme].templateID);
 				const success = await downloadImg(template.img);
-				if (success) {
-					setMeme(memes[currentMeme]);
-					setTemplate(template);
-				}
+				setMeme(memes[currentMeme]);
+				setTemplate(template);
 			}
+		} catch (err) {
+			console.log(err);
 		}
 		setLoading(false);
 	};
@@ -50,6 +53,12 @@ function useMeme(): UseMemeReturnType {
 		currentMeme++;
 		prepareCurrentMeme();
 	};
+
+	// console.log(currentMeme);
+	// console.log(memes?.length);
+	// console.log(
+	// 	currentMeme !== null && memes !== null && currentMeme + 1 < memes.length ? nextMeme : null
+	// );
 
 	return [
 		meme,

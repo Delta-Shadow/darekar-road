@@ -1,23 +1,22 @@
 import { useRef } from 'react';
-import { BarLoader, BeatLoader as Loader, CircleLoader } from 'react-spinners';
+import { BarLoader, BeatLoader as Loader } from 'react-spinners';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import EditableMeme from '../components/EditableMeme';
 import { simpleFade } from '../lib/animationVariants';
 import useAPI from '../lib/useAPI';
-import fetchTemplate from '../api/fetchTemplate';
-import postMeme from '../api/postMeme';
-// import postMeme from '../api/postMeme';
+import { readTemplate } from '../api/template';
+import { createTemplatedMeme } from '../api/meme';
 
 const Editor = () => {
 	const [searchParams] = useSearchParams();
-	const [template, templateFetchStatus, getTemplate] = useAPI(fetchTemplate);
-	const [postMemeResponse, postMemeStatus, postMemeTrigger] = useAPI(postMeme, {
+	const txts = useRef<Array<string> | null>(null);
+	const [template, templateFetchStatus, getTemplate] = useAPI(readTemplate);
+	const [postMemeResponse, postMemeStatus, postMeme] = useAPI(createTemplatedMeme, {
 		resetOnFail: true,
 		delayedReset: true
 	});
-	const txts = useRef<Array<string> | null>(null);
 
 	const templateID = searchParams.get('t');
 	if (templateID === null) return <Navigate to='/' />;
@@ -30,8 +29,8 @@ const Editor = () => {
 
 	const handlePost = () => {
 		if (template === null || txts.current === null) return;
-		postMemeTrigger({
-			templateID: template.id,
+		postMeme({
+			templateID: templateID,
 			texts: txts.current
 		});
 	};

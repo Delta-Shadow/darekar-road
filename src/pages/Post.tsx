@@ -1,12 +1,13 @@
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BeatLoader } from 'react-spinners';
+
 import { simpleFade } from '../lib/animationVariants';
 import useLoader from '../lib/useLoader';
-import fetchAllTemplates from '../api/fetchAllTemplates';
+import { readAllTemplates } from '../api/template';
 
 const Post = () => {
-	const [templates, templatesFetchStatus] = useLoader(fetchAllTemplates);
+	const [templates, templatesFetchStatus] = useLoader(readAllTemplates);
 
 	return (
 		<motion.div
@@ -47,16 +48,21 @@ const Post = () => {
 	);
 };
 
-const TemplatesGrid = ({ templates }: { templates: Array<Template> }) => {
+const TemplatesGrid = (props: { templates: Map<string, Template> }) => {
 	return (
 		<motion.div
 			variants={simpleFade}
 			className={`grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-4 lg:gap-16`}
 		>
 			<CustomThumbnail />
-			{templates.map(template => (
-				<TemplateThumbnail {...template} />
-			))}
+			{(Object.entries(props.templates) as Array<[string, Template]>).map(
+				([id, template]) => (
+					<TemplateThumbnail
+						targetId={id}
+						{...template}
+					/>
+				)
+			)}
 		</motion.div>
 	);
 };
@@ -80,14 +86,14 @@ const CustomThumbnail = () => {
 	);
 };
 
-const TemplateThumbnail = (props: Template) => {
+const TemplateThumbnail = (props: Template & { targetId: string }) => {
 	const navigate = useNavigate();
 
 	const handleClick = () => {
 		navigate({
 			pathname: '/editor',
 			search: `${createSearchParams({
-				t: props.id
+				t: props.targetId
 			})}`
 		});
 	};

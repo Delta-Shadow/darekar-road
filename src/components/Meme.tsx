@@ -11,7 +11,12 @@ const Meme = (props: MemeProps) => {
 	return (
 		<BoxFitImage src={props.img}>
 			{props.textboxes.map((textbox, i) => (
-				<MemeText {...textbox}>{props.texts.at(i)}</MemeText>
+				<MemeText
+					key={i}
+					{...textbox}
+				>
+					{props.texts.at(i)}
+				</MemeText>
 			))}
 		</BoxFitImage>
 	);

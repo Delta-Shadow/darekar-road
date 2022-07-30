@@ -2,7 +2,6 @@ import { DocumentReference, Timestamp } from 'firebase/firestore';
 
 declare global {
 	interface Meme {
-		id: string;
 		creationTime: Timestamp;
 		isCustom: boolean;
 		customImg: string;
@@ -11,7 +10,6 @@ declare global {
 	}
 
 	interface Template {
-		id: string;
 		name: string;
 		img: string;
 		textboxes: Array<Textbox>;
