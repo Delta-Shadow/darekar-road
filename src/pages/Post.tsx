@@ -71,7 +71,7 @@ const CustomThumbnail = () => {
 	const navigate = useNavigate();
 
 	const handleClick = () => {
-		navigate('/editor');
+		navigate('/customPost');
 	};
 
 	return (

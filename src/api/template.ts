@@ -8,6 +8,8 @@ import {
 	addDoc
 } from 'firebase/firestore';
 
+export interface TemplateData extends Template {}
+
 const converter: FirestoreDataConverter<Template> = {
 	fromFirestore: doc => doc.data() as Template,
 	toFirestore: data => data
@@ -27,6 +29,6 @@ export async function readTemplate(id: string): Promise<Template> {
 	return template;
 }
 
-export async function createTemplate(data: Template) {
+export async function createTemplate(data: TemplateData) {
 	await addDoc(collection(db, 'templates').withConverter(converter), data);
 }

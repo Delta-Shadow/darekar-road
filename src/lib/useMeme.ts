@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import downloadImg from '../api/downloadImg';
+import { downloadImg } from '../api/image';
 import { readAllMemes } from '../api/meme';
 import { readTemplate } from '../api/template';
 

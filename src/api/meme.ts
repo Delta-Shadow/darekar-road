@@ -8,6 +8,15 @@ import {
 	doc,
 	getDoc
 } from 'firebase/firestore';
+import { uploadImg } from './image';
+
+export interface CustomMemeData {
+	img: File;
+}
+export interface TemplatedMemeData {
+	templateID: string;
+	texts: Array<string>;
+}
 
 const converter: FirestoreDataConverter<Meme> = {
 	fromFirestore: doc => doc.data() as Meme,
@@ -28,11 +37,13 @@ export async function readMeme(id: string): Promise<Meme> {
 	return data;
 }
 
-export async function createCustomMeme(customMemeData: { img: string }) {
+export async function createCustomMeme(customMemeData: CustomMemeData) {
+	const imgPath = await uploadImg('customMemeImg', 'customMeme', customMemeData.img);
+
 	const memeData = {
 		creationTime: Timestamp.fromDate(new Date()),
 		isCustom: true,
-		customImg: customMemeData.img,
+		customImg: imgPath,
 		templateID: '',
 		textboxes: []
 	};
@@ -40,10 +51,7 @@ export async function createCustomMeme(customMemeData: { img: string }) {
 	await addDoc(collection(db, 'memes').withConverter(converter), memeData);
 }
 
-export async function createTemplatedMeme(templatedMemeData: {
-	templateID: string;
-	texts: Array<string>;
-}) {
+export async function createTemplatedMeme(templatedMemeData: TemplatedMemeData) {
 	const memeData = {
 		creationTime: Timestamp.fromDate(new Date()),
 		isCustom: false,
