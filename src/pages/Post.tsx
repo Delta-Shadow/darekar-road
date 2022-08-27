@@ -36,7 +36,12 @@ const Post = () => {
 				</motion.div>
 			)}
 			{templatesFetchStatus === 'failed' && (
-				<motion.p {...animationProps(SimpleFade)}>Failed to load templates</motion.p>
+				<motion.p
+					{...animationProps(SimpleFade)}
+					className='text-center text-zinc-400 text-lg'
+				>
+					Failed to load templates
+				</motion.p>
 			)}
 			{templatesFetchStatus === 'finished' && templates !== null && (
 				<TemplatesGrid templates={templates} />

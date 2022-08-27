@@ -56,7 +56,7 @@ const Home = () => {
 					)}
 				</AnimatePresence>
 			</motion.div>
-			{!loading && (
+			{!loading && meme !== null && (
 				<motion.p
 					{...animationProps(SimpleFade)}
 					className='text-zinc-600 text-lg'
