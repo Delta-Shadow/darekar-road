@@ -2,7 +2,7 @@ import { useNavigate, createSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BeatLoader } from 'react-spinners';
 
-import { simpleFade } from '../lib/animationVariants';
+import { animationProps, SimpleFade } from '../lib/animationVariants';
 import useLoader from '../lib/useLoader';
 import { readAllTemplates } from '../api/template';
 
@@ -11,26 +11,23 @@ const Post = () => {
 
 	return (
 		<motion.div
-			variants={simpleFade}
-			initial='hidden'
-			animate='visible'
-			exit='hidden'
+			{...animationProps(SimpleFade, true)}
 			className='bg-zinc-900 p-8 md:px-24 xl:px-48 xl:py-24 2xl:px-64 2xl:py-32'
 		>
 			<motion.p
-				variants={simpleFade}
+				{...animationProps(SimpleFade)}
 				className='mb-4 text-xl md:text-3xl text-zinc-400 text-center'
 			>
 				Darekar aapke contribution ka swagat karte hai
 			</motion.p>
 			<motion.p
-				variants={simpleFade}
+				{...animationProps(SimpleFade)}
 				className='mb-16 text-sm md:text-xl text-zinc-600 text-center'
 			>
 				Koi bhi template uthao aur road ko aage badhao
 			</motion.p>
 			{templatesFetchStatus === 'waiting' && (
-				<motion.div variants={simpleFade}>
+				<motion.div {...animationProps(SimpleFade)}>
 					<BeatLoader
 						className='text-center'
 						size={15}
@@ -39,7 +36,7 @@ const Post = () => {
 				</motion.div>
 			)}
 			{templatesFetchStatus === 'failed' && (
-				<motion.p variants={simpleFade}>Failed to load templates</motion.p>
+				<motion.p {...animationProps(SimpleFade)}>Failed to load templates</motion.p>
 			)}
 			{templatesFetchStatus === 'finished' && templates !== null && (
 				<TemplatesGrid templates={templates} />
@@ -51,7 +48,7 @@ const Post = () => {
 const TemplatesGrid = (props: { templates: Map<string, Template> }) => {
 	return (
 		<motion.div
-			variants={simpleFade}
+			{...animationProps(SimpleFade)}
 			className={`grid grid-cols-2 auto-rows-[minmax(0,30vh)] lg:grid-cols-3 gap-4 lg:gap-16`}
 		>
 			<CustomThumbnail />
@@ -76,7 +73,7 @@ const CustomThumbnail = () => {
 
 	return (
 		<motion.div
-			variants={simpleFade}
+			{...animationProps(SimpleFade)}
 			className='rounded-xl hover:shadow-xl shadow-2xl flex flex-col justify-center items-center gap-4 cursor-pointer'
 			onClick={handleClick}
 		>
@@ -100,7 +97,7 @@ const TemplateThumbnail = (props: Template & { targetId: string }) => {
 
 	return (
 		<motion.div
-			variants={simpleFade}
+			{...animationProps(SimpleFade)}
 			className='rounded-xl shadow-2xl hover:shadow-xl cursor-pointer'
 			onClick={handleClick}
 		>

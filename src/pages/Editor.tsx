@@ -4,7 +4,7 @@ import { Navigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import EditableMeme from '../components/EditableMeme';
-import { simpleFade } from '../lib/animationVariants';
+import { animationProps, SimpleFade } from '../lib/animationVariants';
 import useAPI from '../lib/useAPI';
 import { readTemplate } from '../api/template';
 import { createTemplatedMeme } from '../api/meme';
@@ -37,14 +37,11 @@ const Editor = () => {
 
 	return (
 		<motion.div
-			variants={simpleFade}
-			initial='hidden'
-			animate='visible'
-			exit='hidden'
+			{...animationProps(SimpleFade)}
 			className='flex-1 flex flex-col gap-8 justify-center items-center bg-zinc-900'
 		>
 			<motion.div
-				variants={simpleFade}
+				{...animationProps(SimpleFade)}
 				className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'
 			>
 				{templateFetchStatus === 'waiting' ||
@@ -55,22 +52,12 @@ const Editor = () => {
 						/>
 					))}
 				{templateFetchStatus === 'failed' && (
-					<motion.div
-						variants={simpleFade}
-						initial='hidden'
-						animate='visible'
-						exit='hidden'
-					>
+					<motion.div {...animationProps(SimpleFade, true)}>
 						<TemplateError />
 					</motion.div>
 				)}
 				{templateFetchStatus === 'finished' && template !== null && (
-					<motion.div
-						variants={simpleFade}
-						initial='hidden'
-						animate='visible'
-						exit='hidden'
-					>
+					<motion.div {...animationProps(SimpleFade, true)}>
 						<EditableMeme
 							img={template.img}
 							textboxes={template.textboxes}
@@ -80,7 +67,7 @@ const Editor = () => {
 				)}
 			</motion.div>
 			<motion.button
-				variants={simpleFade}
+				{...animationProps(SimpleFade)}
 				className='p-2 bg-zinc-400 rounded-xl  w-1/6'
 				onClick={postMemeStatus === 'not_started' ? handlePost : undefined}
 			>

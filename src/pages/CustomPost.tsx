@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { simpleFade } from '../lib/animationVariants';
+import { animationProps, SimpleFade } from '../lib/animationVariants';
 import { MdAdd } from 'react-icons/md';
 import BoxFitImage from '../components/BoxFitImage';
 import { createCustomMeme } from '../api/meme';
@@ -49,10 +49,7 @@ const CustomPost = () => {
 
 	return (
 		<motion.div
-			variants={simpleFade}
-			initial='hidden'
-			animate='visible'
-			exit='hidden'
+			{...animationProps(SimpleFade, true)}
 			className='flex-1 flex flex-col justify-center items-center gap-4'
 			onDrop={handleFileDrop}
 			onDragOver={e => e.preventDefault()}
@@ -60,7 +57,7 @@ const CustomPost = () => {
 			{imgURL === null ? (
 				<>
 					<motion.p
-						variants={simpleFade}
+						{...animationProps(SimpleFade)}
 						className='text-zinc-500 text-2xl text-center'
 					>
 						Tap the button to select an image
@@ -68,7 +65,7 @@ const CustomPost = () => {
 						Or just drag and drop
 					</motion.p>
 					<motion.label
-						variants={simpleFade}
+						{...animationProps(SimpleFade)}
 						className='cursor-pointer bg-zinc-100 rounded-full shadow-2xl p-2'
 					>
 						<MdAdd className='text-zinc-300 text-4xl' />
@@ -84,7 +81,7 @@ const CustomPost = () => {
 				<>
 					<BoxFitImage src={imgURL} />
 					<motion.button
-						variants={simpleFade}
+						{...animationProps(SimpleFade)}
 						className={`p-2 rounded-xl w-1/6`}
 						onClick={postMemeStatus === 'not_started' ? handlePost : undefined}
 					>
@@ -99,7 +96,7 @@ const CustomPost = () => {
 						{postMemeStatus === 'failed' && 'Could not post'}
 					</motion.button>
 					<motion.button
-						variants={simpleFade}
+						{...animationProps(SimpleFade)}
 						className='p-2 bg-zinc-400 rounded-xl  w-1/6'
 						onClick={() => {
 							setImg(null);

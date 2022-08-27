@@ -4,16 +4,25 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import Meme from '../components/Meme';
 import CustomMeme from '../components/CustomMeme';
-import { simpleFade } from '../lib/animationVariants';
+import { animationProps, SimpleFade } from '../lib/animationVariants';
 import useMeme from '../lib/useMeme';
 
 const Home = () => {
 	const [meme, template, loading, nextMeme] = useMeme();
 
+	// Handle the 'Space' Key
+	const handleKey = (e: KeyboardEvent) => {
+		if (e.code == 'Space') handleNext();
+	};
+
+	// Handle moving to the next meme
+	const handleNext = () => {
+		console.log('Will run:', Boolean(nextMeme));
+		if (nextMeme !== null) nextMeme();
+	};
+
+	// Attaching event listeners
 	useEffect(() => {
-		const handleKey = (e: KeyboardEvent) => {
-			if (e.code == 'Space') handleNext();
-		};
 		window.addEventListener('keypress', handleKey);
 		window.addEventListener('click', handleNext);
 		return () => {
@@ -21,11 +30,6 @@ const Home = () => {
 			window.removeEventListener('click', handleNext);
 		};
 	}, []);
-
-	const handleNext = () => {
-		console.log('Will run:', Boolean(nextMeme));
-		if (nextMeme !== null) nextMeme();
-	};
 
 	return (
 		<motion.div className='flex-1 flex flex-col gap-4 justify-center items-center bg-zinc-900'>
@@ -39,12 +43,7 @@ const Home = () => {
 				<AnimatePresence>{!loading && meme === null && <MemeError />}</AnimatePresence>
 				<AnimatePresence>
 					{!loading && meme !== null && (
-						<motion.div
-							variants={simpleFade}
-							initial='hidden'
-							animate='visible'
-							exit='hidden'
-						>
+						<motion.div {...animationProps(SimpleFade, true)}>
 							{meme.isCustom && <CustomMeme img={meme.customImg} />}
 							{!meme.isCustom && template !== null && (
 								<Meme
@@ -59,7 +58,7 @@ const Home = () => {
 			</motion.div>
 			{!loading && (
 				<motion.p
-					variants={simpleFade}
+					{...animationProps(SimpleFade)}
 					className='text-zinc-600 text-lg'
 				>
 					{nextMeme === null
@@ -74,7 +73,7 @@ const Home = () => {
 const MemeError = () => {
 	return (
 		<motion.div
-			variants={simpleFade}
+			{...animationProps(SimpleFade, true)}
 			initial='hidden'
 			animate='visible'
 			exit='hidden'
