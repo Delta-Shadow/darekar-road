@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 
 type Loader = (...args: any) => Promise<any>;
+
 type PromisedValue<T extends Loader> = Awaited<ReturnType<T>> | null;
+
 type Status = 'waiting' | 'finished' | 'failed';
+
 type ReturnObject<T extends Loader> = [PromisedValue<T>, Status];
+
 type Options<T extends Loader> = {
 	args?: Parameters<T>;
 	fallbackValue?: PromisedValue<T>;

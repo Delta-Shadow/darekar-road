@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 
 type EndpointHandler = (...args: any) => Promise<any>;
+
 type PromisedValue<T extends EndpointHandler> = Awaited<ReturnType<T>> | null;
-type Status = 'not_started' | 'waiting' | 'finished' | 'failed';
-type ReturnObject<T extends EndpointHandler> = [
-	PromisedValue<T>,
-	Status,
-	(...args: Parameters<T>) => void
-];
+
+type Status = 'idle' | 'waiting' | 'finished' | 'failed';
+
+type ReturnObject<T extends EndpointHandler> = {
+	value: PromisedValue<T>;
+	status: Status;
+	trigger: (...args: Parameters<T>) => void;
+};
+
 type Options<T extends EndpointHandler> = {
 	resetOnFail?: boolean;
 	delayedReset?: boolean;
@@ -21,7 +25,7 @@ function useAPI<T extends EndpointHandler>(
 	options?: Options<T>
 ): ReturnObject<T> {
 	const [value, setValue] = useState<PromisedValue<T>>(null);
-	const [status, setStatus] = useState<Status>('not_started');
+	const [status, setStatus] = useState<Status>('idle');
 
 	const loadValue = async (args: Parameters<T>) => {
 		setStatus('waiting');
@@ -45,7 +49,7 @@ function useAPI<T extends EndpointHandler>(
 	};
 
 	const reset = () => {
-		if (status === 'finished' || status === 'failed') setStatus('not_started');
+		if (status === 'finished' || status === 'failed') setStatus('idle');
 	};
 
 	useEffect(() => {
@@ -59,7 +63,7 @@ function useAPI<T extends EndpointHandler>(
 		}
 	}, [status]);
 
-	return [value, status, trigger];
+	return { value, status, trigger };
 }
 
 export default useAPI;

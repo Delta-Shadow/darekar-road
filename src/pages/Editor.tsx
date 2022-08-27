@@ -12,8 +12,8 @@ import { createTemplatedMeme } from '../api/meme';
 const Editor = () => {
 	const [searchParams] = useSearchParams();
 	const txts = useRef<Array<string> | null>(null);
-	const [template, templateFetchStatus, getTemplate] = useAPI(readTemplate);
-	const [postMemeResponse, postMemeStatus, postMeme] = useAPI(createTemplatedMeme, {
+	const templateFetcher = useAPI(readTemplate);
+	const memePoster = useAPI(createTemplatedMeme, {
 		resetOnFail: true,
 		delayedReset: true
 	});
@@ -21,15 +21,15 @@ const Editor = () => {
 	const templateID = searchParams.get('t');
 	if (templateID === null) return <Navigate to='/' />;
 
-	if (templateFetchStatus === 'not_started') getTemplate(templateID);
+	if (templateFetcher.status === 'idle') templateFetcher.trigger(templateID);
 
 	const handleEdit = ((_txts: Array<string>) => {
 		txts.current = _txts;
 	}).bind(this);
 
 	const handlePost = () => {
-		if (template === null || txts.current === null) return;
-		postMeme({
+		if (templateFetcher.value === null || txts.current === null) return;
+		memePoster.trigger({
 			templateID: templateID,
 			texts: txts.current
 		});
@@ -44,23 +44,23 @@ const Editor = () => {
 				{...animationProps(SimpleFade)}
 				className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'
 			>
-				{templateFetchStatus === 'waiting' ||
-					(templateFetchStatus === 'not_started' && (
+				{templateFetcher.status === 'waiting' ||
+					(templateFetcher.status === 'idle' && (
 						<Loader
 							size={15}
 							color='white'
 						/>
 					))}
-				{templateFetchStatus === 'failed' && (
+				{templateFetcher.status === 'failed' && (
 					<motion.div {...animationProps(SimpleFade, true)}>
 						<TemplateError />
 					</motion.div>
 				)}
-				{templateFetchStatus === 'finished' && template !== null && (
+				{templateFetcher.status === 'finished' && templateFetcher.value !== null && (
 					<motion.div {...animationProps(SimpleFade, true)}>
 						<EditableMeme
-							img={template.img}
-							textboxes={template.textboxes}
+							img={templateFetcher.value.img}
+							textboxes={templateFetcher.value.textboxes}
 							onEdit={handleEdit}
 						/>
 					</motion.div>
@@ -69,17 +69,17 @@ const Editor = () => {
 			<motion.button
 				{...animationProps(SimpleFade)}
 				className='p-2 bg-zinc-400 rounded-xl  w-1/6'
-				onClick={postMemeStatus === 'not_started' ? handlePost : undefined}
+				onClick={memePoster.status === 'idle' ? handlePost : undefined}
 			>
-				{postMemeStatus === 'not_started' && 'Post karo'}
-				{postMemeStatus === 'waiting' && (
+				{memePoster.status === 'idle' && 'Post karo'}
+				{memePoster.status === 'waiting' && (
 					<>
 						Waiting
 						<BarLoader width='100%' />
 					</>
 				)}
-				{postMemeStatus === 'finished' && 'Posted Meme!'}
-				{postMemeStatus === 'failed' && 'Could not post'}
+				{memePoster.status === 'finished' && 'Posted Meme!'}
+				{memePoster.status === 'failed' && 'Could not post'}
 			</motion.button>
 		</motion.div>
 	);

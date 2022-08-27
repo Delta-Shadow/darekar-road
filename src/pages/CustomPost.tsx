@@ -10,7 +10,7 @@ import { BarLoader } from 'react-spinners';
 const CustomPost = () => {
 	const [img, setImg] = useState<File | null>(null);
 	const [imgURL, setImgURL] = useState<string | null>(null);
-	const [postMemeResponse, postMemeStatus, postMeme] = useAPI(createCustomMeme, {
+	const memePoster = useAPI(createCustomMeme, {
 		resetOnFail: true,
 		delayedReset: true
 	});
@@ -44,7 +44,7 @@ const CustomPost = () => {
 
 	const handlePost = () => {
 		if (img === null) return;
-		postMeme({ img: img });
+		memePoster.trigger({ img: img });
 	};
 
 	return (
@@ -83,17 +83,17 @@ const CustomPost = () => {
 					<motion.button
 						{...animationProps(SimpleFade)}
 						className={`p-2 rounded-xl w-1/6`}
-						onClick={postMemeStatus === 'not_started' ? handlePost : undefined}
+						onClick={memePoster.status === 'idle' ? handlePost : undefined}
 					>
-						{postMemeStatus === 'not_started' && 'Post karo'}
-						{postMemeStatus === 'waiting' && (
+						{memePoster.status === 'idle' && 'Post karo'}
+						{memePoster.status === 'waiting' && (
 							<>
 								Waiting
 								<BarLoader width='100%' />
 							</>
 						)}
-						{postMemeStatus === 'finished' && 'Posted Meme!'}
-						{postMemeStatus === 'failed' && 'Could not post'}
+						{memePoster.status === 'finished' && 'Posted Meme!'}
+						{memePoster.status === 'failed' && 'Could not post'}
 					</motion.button>
 					<motion.button
 						{...animationProps(SimpleFade)}
