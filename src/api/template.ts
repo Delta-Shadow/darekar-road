@@ -7,8 +7,11 @@ import {
 	getDocs,
 	addDoc
 } from 'firebase/firestore';
+import { uploadImg } from './image';
 
-export interface TemplateData extends Template {}
+export type TemplateData = Omit<Template, 'img'> & {
+	img: File;
+};
 
 const converter: FirestoreDataConverter<Template> = {
 	fromFirestore: doc => doc.data() as Template,
@@ -30,5 +33,7 @@ export async function readTemplate(id: string): Promise<Template> {
 }
 
 export async function createTemplate(data: TemplateData) {
-	await addDoc(collection(db, 'templates').withConverter(converter), data);
+	const imgPath = await uploadImg(data.name, 'template', data.img);
+	const uploadableData = { ...data, img: imgPath };
+	await addDoc(collection(db, 'templates').withConverter(converter), uploadableData);
 }

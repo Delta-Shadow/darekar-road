@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Post from './pages/Post';
 import Editor from './pages/Editor';
 import CustomPost from './pages/CustomPost';
+import PostTemplate from './pages/PostTemplate';
 
 const App = () => {
 	return (
@@ -12,6 +13,7 @@ const App = () => {
 				<div className='pt-4 px-4 flex flex-row gap-4 justify-evenly text-zinc-600 text-md md:justify-end'>
 					<Link to='/'>Memes</Link>
 					<Link to='/post'>Post</Link>
+					<Link to='/postTemplate'>New Template</Link>
 				</div>
 				<Routes>
 					<Route
@@ -29,6 +31,10 @@ const App = () => {
 					<Route
 						path='/customPost'
 						element={<CustomPost />}
+					/>
+					<Route
+						path='/postTemplate'
+						element={<PostTemplate />}
 					/>
 				</Routes>
 			</div>

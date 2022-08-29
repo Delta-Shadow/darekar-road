@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface BoxFitImageProps {
 	src: string;
+	afterFitting?: (x: number, y: number, w: number, h: number) => void;
 	children?: React.ReactNode;
 }
 
@@ -25,6 +26,21 @@ const BoxFitImage = (props: BoxFitImageProps) => {
 	};
 
 	useEffect(adjustSize, [rootRef, imgRef]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			if (imgRef.current !== null && fillAxis !== null && props.afterFitting) {
+				const dimensions = imgRef.current.getBoundingClientRect();
+				props.afterFitting(
+					dimensions.left,
+					dimensions.top,
+					dimensions.width,
+					dimensions.height
+				);
+			}
+		}, 100);
+	}, [imgRef, fillAxis]);
+
 	window.addEventListener('resize', adjustSize);
 
 	return (
