@@ -189,7 +189,7 @@ const PostTemplate = () => {
 									<BarLoader width='100%' />
 								</>
 							)}
-							{templatePoster.status === 'finished' && 'Posted Meme!'}
+							{templatePoster.status === 'finished' && 'Posted Template!'}
 							{templatePoster.status === 'failed' && 'Could not post'}
 						</motion.button>
 						<motion.button

@@ -1,4 +1,4 @@
-import { ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from '../lib/firebase';
 
 export async function uploadImg(
@@ -7,7 +7,8 @@ export async function uploadImg(
 	img: File
 ): Promise<string> {
 	const snapshot = await uploadBytes(ref(storage, `${role}/${name}_${img.name}`), img);
-	return snapshot.ref.fullPath;
+	const url = await getDownloadURL(snapshot.ref);
+	return url;
 }
 
 export async function downloadImg(url: string) {
