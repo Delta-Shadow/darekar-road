@@ -150,7 +150,8 @@ const PostTemplate = () => {
 				// If an image is selected, display it and allow user to drag textboxes
 				<>
 					<input
-						className=' outline-none border-x-0 border-t-0 border-b-2 border-solid border-white'
+						className='outline-none border-x-0 border-t-0 border-b-2 border-solid border-white bg-transparent w-72 text-zinc-50 text-xl p-2'
+						placeholder='Give this template a name'
 						value={templateName}
 						onChange={e => setTemplateName(e.target.value)}
 					/>
@@ -177,7 +178,7 @@ const PostTemplate = () => {
 					<div className='mt-4 flex flex-row gap-4 justify-center'>
 						<motion.button
 							{...animationProps(SimpleFade)}
-							className='p-2 bg-zinc-400 rounded-xl w-52'
+							className='p-2 bg-zinc-400 rounded-xl w-48'
 							onClick={
 								templatePoster.status === 'idle' ? handleTemplatePost : undefined
 							}
@@ -194,7 +195,7 @@ const PostTemplate = () => {
 						</motion.button>
 						<motion.button
 							{...animationProps(SimpleFade)}
-							className='p-2 bg-zinc-400 rounded-xl w-52'
+							className='p-2 bg-zinc-400 rounded-xl w-48'
 							onClick={handleRemoveImg}
 						>
 							Remove
@@ -214,7 +215,7 @@ interface TextboxPlaceholderProps extends Textbox {
 const TextboxPlaceholder = (props: TextboxPlaceholderProps) => {
 	return (
 		<div
-			className='absolute border-white border-solid border-2 flex justify-center items-center'
+			className='absolute border-white border-solid border-2 flex justify-center items-center shadow-xl'
 			style={{
 				zIndex: props.index * 100,
 				left: `${props.x}%`,
