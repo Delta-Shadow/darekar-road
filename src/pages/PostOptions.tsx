@@ -93,7 +93,7 @@ const TemplateThumbnail = (props: Template & { targetId: string }) => {
 
 	const handleClick = () => {
 		navigate({
-			pathname: '/editor',
+			pathname: '/post/editor',
 			search: `${createSearchParams({
 				t: props.targetId
 			})}`

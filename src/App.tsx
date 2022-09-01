@@ -1,9 +1,9 @@
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Home from './pages/Home';
-import Post from './pages/Post';
-import Editor from './pages/Editor';
-import CustomPost from './pages/CustomPost';
+import PostOptions from './pages/PostOptions';
+import PostTemplatedMeme from './pages/PostTemplatedMeme';
+import PostCustomMeme from './pages/PostCustomMeme';
 import PostTemplate from './pages/PostTemplate';
 
 const App = () => {
@@ -13,29 +13,31 @@ const App = () => {
 				<div className='pt-4 px-4 flex flex-row gap-4 justify-evenly text-zinc-600 text-md md:justify-end'>
 					<Link to='/'>Memes</Link>
 					<Link to='/post'>Post</Link>
-					<Link to='/postTemplate'>New Template</Link>
+					<Link to='/post/template'>New Template</Link>
 				</div>
 				<Routes>
 					<Route
 						path='/'
 						element={<Home />}
 					/>
-					<Route
-						path='/post'
-						element={<Post />}
-					/>
-					<Route
-						path='/editor'
-						element={<Editor />}
-					/>
-					<Route
-						path='/customPost'
-						element={<CustomPost />}
-					/>
-					<Route
-						path='/postTemplate'
-						element={<PostTemplate />}
-					/>
+					<Route path='/post'>
+						<Route
+							index
+							element={<PostOptions />}
+						/>
+						<Route
+							path='editor'
+							element={<PostTemplatedMeme />}
+						/>
+						<Route
+							path='custom'
+							element={<PostCustomMeme />}
+						/>
+						<Route
+							path='template'
+							element={<PostTemplate />}
+						/>
+					</Route>
 				</Routes>
 			</div>
 		</BrowserRouter>
