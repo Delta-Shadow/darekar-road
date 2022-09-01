@@ -33,42 +33,42 @@ const Home = () => {
 
 	return (
 		// Outer box that covers all the space from the navbar and down
-		<motion.div className='flex-1 flex flex-col gap-4 justify-center items-center bg-zinc-900'>
+		<div className='flex-1 flex flex-col gap-4 justify-center items-center bg-zinc-900'>
 			{/* Smaller Box centered in the middle that will contain the meme */}
-			<motion.div className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'>
+			<div className='w-full h-full md:w-2/3 md:h-2/3 flex justify-center items-center'>
 				{loading && (
 					// If loading, display the loader
-					<Loader
-						size={15}
-						color='white'
-					/>
+					<motion.div {...animationProps(SimpleFade, true)}>
+						<Loader
+							size={15}
+							color='white'
+						/>
+					</motion.div>
 				)}
 				{
 					// If finished loading but meme is still null, there has been an error
 					!loading && meme === null && <MemeError />
 				}
-				<AnimatePresence>
-					{!loading && meme !== null && (
-						// If finished loading and the meme is non-null, display the meme
-						<motion.div {...animationProps(SimpleFade, true)}>
-							{meme.isCustom && <CustomMeme img={meme.customImg} />}
-							{!meme.isCustom && template !== null && (
-								// Template will always be non-null if meme is non-null
-								<Meme
-									img={template.img}
-									textboxes={template.textboxes}
-									texts={meme.textboxes}
-								/>
-							)}
-						</motion.div>
-					)}
-				</AnimatePresence>
-			</motion.div>
+				{!loading && meme !== null && (
+					// If finished loading and the meme is non-null, display the meme
+					<motion.div {...animationProps(SimpleFade, true)}>
+						{meme.isCustom && <CustomMeme img={meme.customImg} />}
+						{!meme.isCustom && template !== null && (
+							// Template will always be non-null if meme is non-null
+							<Meme
+								img={template.img}
+								textboxes={template.textboxes}
+								texts={meme.textboxes}
+							/>
+						)}
+					</motion.div>
+				)}
+			</div>
 
 			{/* Text that appears below the meme */}
 			{!loading && meme !== null && (
 				<motion.p
-					{...animationProps(SimpleFade)}
+					{...animationProps(SimpleFade, true)}
 					className='text-zinc-600 text-lg'
 				>
 					{nextMeme === null
@@ -76,7 +76,7 @@ const Home = () => {
 						: 'Click anywhere or press spacebar'}
 				</motion.p>
 			)}
-		</motion.div>
+		</div>
 	);
 };
 
