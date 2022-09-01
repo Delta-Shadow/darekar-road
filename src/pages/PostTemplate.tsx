@@ -137,7 +137,7 @@ const PostTemplate = () => {
 						{...animationProps(SimpleFade)}
 						className='cursor-pointer bg-zinc-100 rounded-full shadow-2xl p-2'
 					>
-						<MdAdd className='text-zinc-300 text-4xl' />
+						<MdAdd className='text-zinc-700 text-3xl' />
 						<input
 							type='file'
 							accept='image/*'
@@ -150,7 +150,7 @@ const PostTemplate = () => {
 				// If an image is selected, display it and allow user to drag textboxes
 				<>
 					<input
-						className='outline-none border-x-0 border-t-0 border-b-2 border-solid border-white bg-transparent w-72 text-zinc-50 text-xl p-2'
+						className='outline-none border-x-0 border-t-0 border-b-2 border-solid border-white bg-transparent w-72 text-zinc-50 text-xl p-2 text-center'
 						placeholder='Give this template a name'
 						value={templateName}
 						onChange={e => setTemplateName(e.target.value)}
