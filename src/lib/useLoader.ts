@@ -14,8 +14,8 @@ type Options<T extends Loader> = {
 };
 
 function useLoader<T extends Loader>(loader: T, options?: Options<T>): ReturnObject<T> {
-	if (loader.length > (options?.args === undefined ? 0 : options.args.length))
-		throw new Error('Incorrect arguments for the loader function');
+	// if (loader.length > (options?.args === undefined ? 0 : options.args.length))
+	// throw new Error('Incorrect arguments for the loader function');
 
 	const [data, setData] = useState<PromisedValue<T>>(null);
 	const [status, setStatus] = useState<Status>('waiting');
