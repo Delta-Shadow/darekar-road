@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/darekar-road/static/css/main.8c0a2fde.css",
+    "main.js": "/darekar-road/static/js/main.75275ce0.js",
+    "index.html": "/darekar-road/index.html",
+    "main.8c0a2fde.css.map": "/darekar-road/static/css/main.8c0a2fde.css.map",
+    "main.75275ce0.js.map": "/darekar-road/static/js/main.75275ce0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8c0a2fde.css",
+    "static/js/main.75275ce0.js"
+  ]
+}
