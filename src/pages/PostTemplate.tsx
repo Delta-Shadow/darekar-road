@@ -150,7 +150,7 @@ const PostTemplate = () => {
 				// If an image is selected, display it and allow user to drag textboxes
 				<>
 					<input
-						className='outline-none border-x-0 border-t-0 border-b-2 border-solid border-white bg-transparent w-72 text-zinc-50 text-xl p-2 text-center'
+						className='outline-none border-x-0 border-t-0 border-b-2 border-solid border-white bg-transparent w-72 text-zinc-50 text-xl p-2 mb-4 text-center'
 						placeholder='Give this template a name'
 						value={templateName}
 						onChange={e => setTemplateName(e.target.value)}
@@ -229,7 +229,7 @@ const TextboxPlaceholder = (props: TextboxPlaceholderProps) => {
 				style={{
 					zIndex: props.index * 100
 				}}
-				onClick={e => {
+				onMouseDown={e => {
 					e.stopPropagation();
 					props.onRemove();
 				}}
