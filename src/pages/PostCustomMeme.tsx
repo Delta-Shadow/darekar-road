@@ -68,7 +68,7 @@ const CustomPost = () => {
 						{...animationProps(SimpleFade)}
 						className='cursor-pointer bg-zinc-100 rounded-full shadow-2xl p-2'
 					>
-						<MdAdd className='text-zinc-300 text-4xl' />
+						<MdAdd className='text-zinc-700 text-3xl' />
 						<input
 							type='file'
 							accept='image/*'
@@ -80,30 +80,32 @@ const CustomPost = () => {
 			) : (
 				<>
 					<BoxFitImage src={imgURL} />
-					<motion.button
-						{...animationProps(SimpleFade)}
-						className={`p-2 rounded-xl w-1/6`}
-						onClick={memePoster.status === 'idle' ? handlePost : undefined}
-					>
-						{memePoster.status === 'idle' && 'Post karo'}
-						{memePoster.status === 'waiting' && (
-							<>
-								Waiting
-								<BarLoader width='100%' />
-							</>
-						)}
-						{memePoster.status === 'finished' && 'Posted Meme!'}
-						{memePoster.status === 'failed' && 'Could not post'}
-					</motion.button>
-					<motion.button
-						{...animationProps(SimpleFade)}
-						className='p-2 bg-zinc-400 rounded-xl  w-1/6'
-						onClick={() => {
-							setImg(null);
-						}}
-					>
-						Remove
-					</motion.button>
+					<div className='mt-4 flex flex-row gap-4 justify-center'>
+						<motion.button
+							{...animationProps(SimpleFade)}
+							className='p-2 bg-zinc-400 rounded-xl w-48'
+							onClick={memePoster.status === 'idle' ? handlePost : undefined}
+						>
+							{memePoster.status === 'idle' && 'Post karo'}
+							{memePoster.status === 'waiting' && (
+								<>
+									Waiting
+									<BarLoader width='100%' />
+								</>
+							)}
+							{memePoster.status === 'finished' && 'Posted Meme!'}
+							{memePoster.status === 'failed' && 'Could not post'}
+						</motion.button>
+						<motion.button
+							{...animationProps(SimpleFade)}
+							className='p-2 bg-zinc-400 rounded-xl w-48'
+							onClick={() => {
+								setImg(null);
+							}}
+						>
+							Remove
+						</motion.button>
+					</div>
 				</>
 			)}
 		</motion.div>
