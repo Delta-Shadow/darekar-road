@@ -25,7 +25,7 @@ function useMeme(): UseMemeReturnType {
 
 	const loadMemes = async () => {
 		const result = await readAllMemes();
-		const values = Object.values(result);
+		const values = Object.values(result).reverse();
 		if (values !== null && values.length > 0) {
 			memes = values;
 			currentMeme = 0;
