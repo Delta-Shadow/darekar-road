@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { BeatLoader as Loader } from 'react-spinners';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import Meme from '../components/Meme';
 import CustomMeme from '../components/CustomMeme';
@@ -8,7 +8,7 @@ import { animationProps, SimpleFade } from '../lib/animationVariants';
 import useMeme from '../lib/useMeme';
 
 const Home = () => {
-	const [meme, template, loading, nextMeme] = useMeme();
+	const { meme, template, loading, hasNext, next } = useMeme();
 
 	// Handle the 'Space' Key
 	const handleKey = (e: KeyboardEvent) => {
@@ -17,8 +17,7 @@ const Home = () => {
 
 	// Handle moving to the next meme
 	const handleNext = () => {
-		console.log('Will run:', Boolean(nextMeme));
-		if (nextMeme !== null) nextMeme();
+		next();
 	};
 
 	// Attaching event listeners
@@ -71,9 +70,7 @@ const Home = () => {
 					{...animationProps(SimpleFade, true)}
 					className='text-zinc-600 text-lg'
 				>
-					{nextMeme === null
-						? 'That was all the memes'
-						: 'Click anywhere or press spacebar'}
+					{hasNext ? 'Click anywhere or press spacebar' : 'That was all the memes'}
 				</motion.p>
 			)}
 		</div>

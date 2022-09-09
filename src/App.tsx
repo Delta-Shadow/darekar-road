@@ -7,7 +7,6 @@ import PostCustomMeme from './pages/PostCustomMeme';
 import PostTemplate from './pages/PostTemplate';
 
 const App = () => {
-	console.log(`public URL is: ${process.env.PUBLIC_URL}`);
 	return (
 		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			<div className='flex flex-col bg-zinc-900 w-screen min-h-screen'>

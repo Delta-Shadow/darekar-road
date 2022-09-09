@@ -6,7 +6,13 @@ import { readTemplate } from '../api/template';
 let memes: Array<Meme> | null = null;
 let currentMeme: number | null = null;
 
-type UseMemeReturnType = [Meme | null, Template | null, boolean, (() => void) | null];
+type UseMemeReturnType = {
+	meme: Meme | null;
+	template: Template | null;
+	loading: boolean;
+	hasNext: boolean;
+	next: () => void;
+};
 
 function useMeme(): UseMemeReturnType {
 	const [loading, setLoading] = useState(true);
@@ -49,23 +55,19 @@ function useMeme(): UseMemeReturnType {
 
 	const nextMeme = () => {
 		if (memes === null || currentMeme === null) return;
+		if (currentMeme + 1 === memes.length) return;
 		setLoading(true);
 		currentMeme++;
 		prepareCurrentMeme();
 	};
 
-	// console.log(currentMeme);
-	// console.log(memes?.length);
-	// console.log(
-	// 	currentMeme !== null && memes !== null && currentMeme + 1 < memes.length ? nextMeme : null
-	// );
-
-	return [
+	return {
 		meme,
 		template,
 		loading,
-		currentMeme !== null && memes !== null && currentMeme + 1 < memes.length ? nextMeme : null
-	];
+		hasNext: currentMeme !== null && memes !== null && currentMeme + 1 < memes.length,
+		next: nextMeme
+	};
 }
 
 export default useMeme;
