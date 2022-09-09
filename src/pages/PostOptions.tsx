@@ -58,8 +58,9 @@ const TemplatesGrid = (props: { templates: Map<string, Template> }) => {
 		>
 			<CustomThumbnail />
 			{(Object.entries(props.templates) as Array<[string, Template]>).map(
-				([id, template]) => (
+				([id, template], i) => (
 					<TemplateThumbnail
+						key={i}
 						targetId={id}
 						{...template}
 					/>
@@ -73,7 +74,7 @@ const CustomThumbnail = () => {
 	const navigate = useNavigate();
 
 	const handleClick = () => {
-		navigate('/customPost');
+		navigate('/post/custom');
 	};
 
 	return (

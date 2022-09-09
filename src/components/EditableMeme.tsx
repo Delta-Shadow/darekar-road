@@ -20,6 +20,7 @@ const EditableMeme = (props: EditableMemeProps) => {
 		<BoxFitImage src={props.img}>
 			{props.textboxes.map((textbox, i) => (
 				<MemeText
+					key={i}
 					{...textbox}
 					onEdit={txt => handleEdit(i, txt)}
 				/>
